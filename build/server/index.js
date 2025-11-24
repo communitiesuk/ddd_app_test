@@ -1,4 +1,7 @@
-import { r as render, d as define_property, H as HYDRATION_START, a as HYDRATION_ERROR, b as HYDRATION_END, s as safe_equals, o as object_prototype, c as array_prototype, U as UNINITIALIZED, g as get_descriptor, i as is_extensible, e as array_from, f as equals, h as get_prototype_of, j as is_array, k as run_all, l as index_of, p as push$1, m as setContext, n as pop$1, q as decode_pathname, t as decode_params, u as normalize_path, v as disable_search, w as validate_layout_server_exports, x as validate_layout_exports, y as validate_page_server_exports, z as validate_page_exports, A as resolve, B as make_trackable, C as readable, D as writable } from './chunks/exports-DL7PMiBJ.js';
+import { d as define_property, s as safe_equals, o as object_prototype, a as array_prototype, g as get_descriptor, i as is_extensible, b as array_from, e as equals, c as get_prototype_of, f as is_array, r as run_all, h as index_of, j as decode_pathname, k as decode_params, n as normalize_path, l as disable_search, v as validate_layout_server_exports, m as validate_layout_exports, p as validate_page_server_exports, q as validate_page_exports, t as resolve, u as make_trackable, w as readable, x as writable } from './chunks/exports-CoBaX9l6.js';
+import { r as render, H as HYDRATION_START, a as HYDRATION_ERROR, b as HYDRATION_END, U as UNINITIALIZED, p as push$1, s as setContext, c as pop$1 } from './chunks/index2-doyaKFQR.js';
+import { j as json, t as text } from './chunks/index-BIAFQWR9.js';
+import { p as public_env, s as safe_public_env, a as set_public_env, b as set_safe_public_env, c as set_private_env } from './chunks/shared-server-DIsQ43MR.js';
 
 const BROWSER = false;
 let base = "";
@@ -12,14 +15,6 @@ function override(paths) {
 function reset() {
   base = initial.base;
   assets = initial.assets;
-}
-let public_env = {};
-let safe_public_env = {};
-function set_public_env(environment) {
-  public_env = environment;
-}
-function set_safe_public_env(environment) {
-  safe_public_env = environment;
 }
 const DERIVED = 1 << 1;
 const EFFECT = 1 << 2;
@@ -1628,7 +1623,7 @@ const root = asClassComponent(Root);
 const options = {
   app_template_contains_nonce: false,
   csp: { "mode": "auto", "directives": { "upgrade-insecure-requests": false, "block-all-mixed-content": false }, "reportOnly": { "upgrade-insecure-requests": false, "block-all-mixed-content": false } },
-  csrf_check_origin: true,
+  csrf_check_origin: false,
   embedded: false,
   env_public_prefix: "PUBLIC_",
   env_private_prefix: "",
@@ -1711,7 +1706,7 @@ const options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "14vzt0b"
+  version_hash: "12djhq3"
 };
 async function get_hooks() {
   let handle;
@@ -3117,36 +3112,6 @@ function add_resolution_suffix(pathname) {
 }
 function strip_resolution_suffix(pathname) {
   return pathname.slice(0, -ROUTE_SUFFIX.length);
-}
-function json(data, init2) {
-  const body2 = JSON.stringify(data);
-  const headers2 = new Headers(init2?.headers);
-  if (!headers2.has("content-length")) {
-    headers2.set("content-length", encoder$3.encode(body2).byteLength.toString());
-  }
-  if (!headers2.has("content-type")) {
-    headers2.set("content-type", "application/json");
-  }
-  return new Response(body2, {
-    ...init2,
-    headers: headers2
-  });
-}
-const encoder$3 = new TextEncoder();
-function text(body2, init2) {
-  const headers2 = new Headers(init2?.headers);
-  if (!headers2.has("content-length")) {
-    const encoded = encoder$3.encode(body2);
-    headers2.set("content-length", encoded.byteLength.toString());
-    return new Response(encoded, {
-      ...init2,
-      headers: headers2
-    });
-  }
-  return new Response(body2, {
-    ...init2,
-    headers: headers2
-  });
 }
 function coalesce_to_error(err) {
   return err instanceof Error || err && /** @type {any} */
@@ -6229,8 +6194,11 @@ class Server {
       public_prefix: this.#options.env_public_prefix,
       private_prefix: this.#options.env_private_prefix
     };
-    filter_private_env(env, prefixes);
+    const private_env = filter_private_env(env, prefixes);
     const public_env2 = filter_public_env(env, prefixes);
+    set_private_env(
+      private_env
+    );
     set_public_env(
       public_env2
     );
