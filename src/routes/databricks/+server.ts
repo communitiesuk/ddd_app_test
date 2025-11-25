@@ -13,8 +13,9 @@ export async function GET()
 
     const databricksHost = "adb-3426684393694549.9.azuredatabricks.net";
     const oauthToken = env.DATABRICKS_OAUTH_TOKEN;
-    const oauthClientID = env.AZURE_OAUTH_CLIENT_ID
-    const oauthSecret = env.AZURE_OAUTH_SECRET
+    const oauthClientID = env.AZURE_OAUTH_CLIENT_ID;
+    const oauthSecret = env.AZURE_OAUTH_SECRET;
+    const oauthTenantID = env.AZURE_TENANT_ID;
 
     const databricksPath = "/sql/1.0/warehouses/85f7cb50a68d4eeb";
 
@@ -25,7 +26,8 @@ export async function GET()
         host: databricksHost,
         path: databricksPath,
         oauthClientId: oauthClientID,
-        oauthClientSecret: oauthSecret
+        oauthClientSecret: oauthSecret,
+        azureTenantId: oauthTenantID
     }; 
 
 
