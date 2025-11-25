@@ -42,6 +42,8 @@ console.log(result);
     return json(result);
     }).catch((error) => {
         console.log(result)
+        console.log(error)
+        console.log(client)
         return json("error");
     });
     
