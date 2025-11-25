@@ -11,7 +11,7 @@ import type IOperation from '@databricks/sql/dist/contracts/IOperation';
 export async function GET()
 {
 
-    const databricksHost = "https://adb-3426684393694549.9.azuredatabricks.net";
+    const databricksHost = "adb-3426684393694549.9.azuredatabricks.net";
     const oauthToken = env.DATABRICKS_OAUTH_TOKEN;
     const databricksPath = "/sql/1.0/warehouses/85f7cb50a68d4eeb";
 
@@ -44,7 +44,7 @@ console.log(result);
         console.log(result)
         console.log(error)
         console.log(client)
-        return json("error");
+        return json(error.message);
     });
     
 
