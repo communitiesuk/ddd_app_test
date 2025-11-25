@@ -13,14 +13,21 @@ export async function GET()
 
     const databricksHost = "adb-3426684393694549.9.azuredatabricks.net";
     const oauthToken = env.DATABRICKS_OAUTH_TOKEN;
+    const oauthClientID = env.AZURE_OAUTH_CLIENT_ID
+    const oauthSecret = env.AZURE_OAUTH_SECRET
+
     const databricksPath = "/sql/1.0/warehouses/85f7cb50a68d4eeb";
 
     const client: DBSQLClient = new DBSQLClient();
     const connectOptions = {
-        token: oauthToken,
+        authType: 'databricks-oauth',
+        //token: oauthToken,
         host: databricksHost,
-        path: databricksPath
-    };
+        path: databricksPath,
+        oauthClientId: oauthClientID,
+        oauthClientSecret: oauthSecret
+    }; 
+
 
     var result = {};
 
