@@ -23,6 +23,7 @@
 		"vite": "^6.2.5"
 	},
 	"dependencies": {
+		"@databricks/sql": "^1.12.0",
 		"dotenv": "^16.5.0",
 		"mssql": "^11.0.1",
 		"mysql2": "^3.14.0",
