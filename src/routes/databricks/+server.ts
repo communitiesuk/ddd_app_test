@@ -5,12 +5,12 @@ import { DBSQLClient } from '@databricks/sql';
 import type IDBSQLSession from '@databricks/sql/dist/contracts/IDBSQLSession';
 import type IOperation from '@databricks/sql/dist/contracts/IOperation';
 
-
 /**
  * THIS IS FOR TESTING FUNCTIONALITY, IT IS NOT SUITABLE FOR A PRODUCTION SYSTEM
  */
 export async function GET()
 {
+
     const databricksHost = "https://adb-3426684393694549.9.azuredatabricks.net";
     const oauthToken = env.DATABRICKS_OAUTH_TOKEN;
     const databricksPath = "/sql/1.0/warehouses/85f7cb50a68d4eeb";
@@ -22,6 +22,8 @@ export async function GET()
         path: databricksPath
     };
 
+    var result = {};
+
     await client.connect(connectOptions)
     .then(async (client) => {
         const session: IDBSQLSession = await client.openSession();
@@ -30,8 +32,8 @@ export async function GET()
         runAsync: true,
         maxRows: 10, // This option enables the direct results feature.
     });
-    const result = await queryOperation.fetchAll();
-
+    result = await queryOperation.fetchAll();
+console.log(result);
     await queryOperation.close();
 
     await session.close;
@@ -39,6 +41,7 @@ export async function GET()
 
     return json(result);
     }).catch((error) => {
+        console.log(result)
         return json("error");
     });
     
