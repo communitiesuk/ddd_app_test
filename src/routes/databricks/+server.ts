@@ -4,6 +4,7 @@ import { dev } from '$app/environment';
 import { DBSQLClient } from '@databricks/sql';
 import type IDBSQLSession from '@databricks/sql/dist/contracts/IDBSQLSession';
 import type IOperation from '@databricks/sql/dist/contracts/IOperation';
+import type { ConnectionOptions } from '@databricks/sql/dist/contracts/IDBSQLClient';
 
 /**
  * THIS IS FOR TESTING FUNCTIONALITY, IT IS NOT SUITABLE FOR A PRODUCTION SYSTEM
@@ -20,7 +21,7 @@ export async function GET()
     const databricksPath = "/sql/1.0/warehouses/85f7cb50a68d4eeb";
 
     const client: DBSQLClient = new DBSQLClient();
-    const connectOptions = {
+    const connectOptions : ConnectionOptions = {
         authType: 'databricks-oauth',
         //token: oauthToken,
         host: databricksHost,
