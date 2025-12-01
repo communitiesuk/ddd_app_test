@@ -28,11 +28,12 @@ export async function GET()
         path: databricksPath,
         oauthClientId: oauthClientID,
         oauthClientSecret: oauthSecret,
-        azureTenantId: oauthTenantID
+        azureTenantId: oauthTenantID,
+				useDatabricksOAuthInAzure: true
     }; 
 console.log(connectOptions);
 
-    var result = {};
+    let result = {};
 
     await client.connect(connectOptions)
     .then(async (client) => {
