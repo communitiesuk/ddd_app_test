@@ -30,7 +30,7 @@ export async function GET()
         oauthClientSecret: oauthSecret,
         azureTenantId: oauthTenantID
     }; 
-
+console.log(connectOptions);
 
     var result = {};
 
