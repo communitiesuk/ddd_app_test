@@ -28,10 +28,8 @@ export async function GET()
         path: databricksPath,
         oauthClientId: oauthClientID,
         oauthClientSecret: oauthSecret,
-        azureTenantId: oauthTenantID,
-				useDatabricksOAuthInAzure: true
-    }; 
-console.log(connectOptions);
+        azureTenantId: oauthTenantID
+    };
 
     let result = {};
 
@@ -44,7 +42,6 @@ console.log(connectOptions);
         maxRows: 10, // This option enables the direct results feature.
     });
     result = await queryOperation.fetchAll();
-console.log(result);
     await queryOperation.close();
 
     await session.close;
