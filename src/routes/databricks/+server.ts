@@ -11,7 +11,6 @@ import type { ConnectionOptions } from '@databricks/sql/dist/contracts/IDBSQLCli
  */
 export async function GET()
 {
-
     const databricksHost = "adb-3426684393694549.9.azuredatabricks.net";
     const oauthToken = env.DATABRICKS_OAUTH_TOKEN;
     const oauthClientID = env.AZURE_OAUTH_CLIENT_ID;

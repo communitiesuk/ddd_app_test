@@ -5,6 +5,9 @@ import { auth, DBSQLClient } from '@databricks/sql';
 import type IDBSQLSession from '@databricks/sql/dist/contracts/IDBSQLSession';
 import type IOperation from '@databricks/sql/dist/contracts/IOperation';
 import type { ConnectionOptions } from '@databricks/sql/dist/contracts/IDBSQLClient';
+import { ManagedIdentityCredential } from '@azure/identity';
+
+const DATABRICKS_SCOPE = '2ff814a6-3304-4ab8-85cb-cd0e6f879c1d/.default';
 
 /**
  * THIS IS FOR TESTING FUNCTIONALITY, IT IS NOT SUITABLE FOR A PRODUCTION SYSTEM
@@ -12,37 +15,40 @@ import type { ConnectionOptions } from '@databricks/sql/dist/contracts/IDBSQLCli
 export async function GET()
 {
 	const databricksHost = "adb-3426684393694549.9.azuredatabricks.net";
-	const tokenEndpoint = "https://" + databricksHost + "/oidc/v1/token"
-	const oauthClientID = env.AZURE_OAUTH_CLIENT_ID;
-	const oauthSecret = env.AZURE_OAUTH_SECRET;
+	//const tokenEndpoint = "https://" + databricksHost + "/oidc/v1/token"
+	//const oauthClientID = env.AZURE_OAUTH_CLIENT_ID;
+	//const oauthSecret = env.AZURE_OAUTH_SECRET;
 	const databricksPath = "/sql/1.0/warehouses/85f7cb50a68d4eeb";
     let returnResult = {};
 
 	// the authorisation header for retrieving the oauth token is of the form basse64($clientID:$secet)
-	const authorisationHeader : string = "Basic " +
-		Buffer.from(oauthClientID + ":" + oauthSecret).toString('base64');
+	//const authorisationHeader : string = "Basic " +
+	//	Buffer.from(oauthClientID + ":" + oauthSecret).toString('base64');
 
 	// manually retrieve a m2m oauth token from the oauth token endpoint
-	const m2mOauthTokenResponse : Response = await fetch(tokenEndpoint,
-		{
-			method: 'POST',
-			headers: {'Authorization': authorisationHeader,
-				'Content-Type': 'application/x-www-form-urlencoded'},
-			body: encodeURI("grant_type=client_credentials&scope=all-apis")
-		});
+	// const m2mOauthTokenResponse : Response = await fetch(tokenEndpoint,
+	// 	{
+	// 		method: 'POST',
+	// 		headers: {'Authorization': authorisationHeader,
+	// 			'Content-Type': 'application/x-www-form-urlencoded'},
+	// 		body: encodeURI("grant_type=client_credentials&scope=all-apis")
+	// 	});
 
 	// the fetch returns a promise object so we need to retrieve the json from it, convert it into an object
 	// and then pull it out of the access token field
-	const m2mOauthTokenJson = await m2mOauthTokenResponse.json();
-	const m2mOauthToken = m2mOauthTokenJson.access_token;
-	console.log(m2mOauthTokenJson);
+	// const m2mOauthTokenJson = await m2mOauthTokenResponse.json();
+	// const m2mOauthToken = m2mOauthTokenJson.access_token;
+	// console.log(m2mOauthTokenJson);
+
+	// retrieve the token
+	const m2mOauthToken = await getDatabricksAadToken();
 
 	// we use the databricks azure database driver to make things easier
 	// note that we've had to retrieve our own token as it doesn't support the full azure oauth flow
 	// https://learn.microsoft.com/en-us/azure/databricks/dev-tools/nodejs-sql-driver
 	const client: DBSQLClient = new DBSQLClient();
 	const connectOptions : ConnectionOptions = {
-			token: m2mOauthToken,
+			token: m2mOauthToken.token,
 			host: databricksHost,
 			path: databricksPath,
 	};
@@ -68,4 +74,13 @@ export async function GET()
 	});
 
     return returnResult;
+}
+
+async function getDatabricksAadToken() {
+	const credential = new ManagedIdentityCredential();
+
+	const accessToken = await credential.getToken(DATABRICKS_SCOPE);
+	if (!accessToken?.token) throw new Error("Failed to acquire Databricks AAD token");
+
+	return accessToken;
 }
