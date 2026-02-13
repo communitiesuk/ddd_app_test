@@ -14,11 +14,11 @@ const DATABRICKS_SCOPE = '2ff814a6-3304-4ab8-85cb-cd0e6f879c1d/.default';
  */
 export async function GET()
 {
-	const databricksHost = "adb-3426684393694549.9.azuredatabricks.net";
+	const databricksHost = 'adb-2963605924048650.10.azuredatabricks.net/';
 	//const tokenEndpoint = "https://" + databricksHost + "/oidc/v1/token"
 	//const oauthClientID = env.AZURE_OAUTH_CLIENT_ID;
 	//const oauthSecret = env.AZURE_OAUTH_SECRET;
-	const databricksPath = "/sql/1.0/warehouses/85f7cb50a68d4eeb";
+	const databricksPath = '/sql/1.0/warehouses/1fd6548b22e2a192';
     let returnResult = {};
 
 	// the authorisation header for retrieving the oauth token is of the form basse64($clientID:$secet)
